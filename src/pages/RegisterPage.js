@@ -14,6 +14,11 @@ const RegisterPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!email || !password || !name) {
+      setError("모두 빠지지 않고 입력해주세요");
+      return;
+    }
+
     try {
       if (password !== secPassword) {
         throw new Error("패스워드가 일치하지 않습니다.");

@@ -4,18 +4,37 @@ import api from "../utils/api";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
+import { useNavigate } from "react-router-dom";
 
 const TodoPage = () => {
   const [todoList, setTodoList] = useState([]);
   const [todoValue, setTodoValue] = useState("");
+  const navigate = useNavigate();
+
+  //토큰
+  const token = sessionStorage.getItem("token");
 
   const getTasks = async () => {
+    try {
+      const response = await api.get("/tasks", {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      setTodoList(response.data.data);
+    } catch (error) {
+      console.log("error:token error");
+    }
+
     const response = await api.get("/tasks");
     setTodoList(response.data.data);
   };
   useEffect(() => {
-    getTasks();
-  }, []);
+    if (!token) {
+      navigate("/login");
+    } else {
+      getTasks();
+    }
+    //getTasks();
+  }, [navigate, token]);
   const addTodo = async () => {
     try {
       const response = await api.post("/tasks", {
