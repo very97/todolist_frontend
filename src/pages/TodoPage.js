@@ -20,6 +20,7 @@ const TodoPage = () => {
         headers: { authorization: `Bearer ${token}` },
       });
       setTodoList(response.data.data);
+      console.log("taskList", response.data.data);
     } catch (error) {
       console.log("error:token error");
     }
@@ -27,14 +28,7 @@ const TodoPage = () => {
     const response = await api.get("/tasks");
     setTodoList(response.data.data);
   };
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      getTasks();
-    }
-    //getTasks();
-  }, [navigate, token]);
+
   const addTodo = async () => {
     try {
       const response = await api.post("/tasks", {
@@ -75,8 +69,28 @@ const TodoPage = () => {
       console.log("error", error);
     }
   };
+
+  const logoutPage = () => {
+    sessionStorage.clear();
+    alert("로그아웃이 완료되었습니다");
+  };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      getTasks();
+    }
+    //getTasks();
+  }, [navigate, token]);
+
   return (
     <Container>
+      <div>
+        <button onClick={logoutPage} className="logout-button">
+          로그아웃
+        </button>
+      </div>
       <Row className="add-item-row">
         <Col xs={12} sm={10}>
           <input

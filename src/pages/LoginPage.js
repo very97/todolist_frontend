@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import RegisterPage from "./RegisterPage";
 
-const LoginPage = () => {
+const LoginPage = ({ user, setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   // 로그인 정보 유지하기
-  const [user, setUser] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -48,6 +47,9 @@ const LoginPage = () => {
     }
   };
 
+  if (user) {
+    return <Navigate to="/" />;
+  }
   return (
     <div className="display-center">
       {error && <div className="red-error">{error}</div>}
